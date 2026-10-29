@@ -110,7 +110,7 @@ if st.button("🔄 Sinkronkan Data"):
 st.divider()
 
 # Membuat Tab Layout seperti di HTML
-tab1, tab2 = st.tabs(["Pencapaian Collection (SLA 3)", "Progres Tagihan"])
+tab1, tab2 = st.tabs(["Pencapaian Collection (DataAgregat)", "Progres Tagihan"])
 
 # ==========================================
 # TAB 1: PENCAPAIAN COLLECTION (SLA 3)
