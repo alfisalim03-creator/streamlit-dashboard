@@ -54,16 +54,16 @@ def load_data():
         ])
         client = gspread.authorize(creds)
         
-        # Buka Spreadsheet (Pastikan nama ini SAMA PERSIS dengan di Google Drive)
+        # Buka Spreadsheet
         workbook = client.open("Data Pencapaian Collection 2026")
         
-        # Mengambil data dari tab "SLA3" (Ubah nama sheet jika berbeda)
-        sheet_sla3 = workbook.worksheet("SLA3").get_all_records()
+        # Mengambil data dari tab "DataAgregat" (sebelumnya "SLA3")
+        sheet_sla3 = workbook.worksheet("DataAgregat").get_all_records()
         df_sla3 = pd.DataFrame(sheet_sla3)
         
-        # Mengambil data dari tab "Progres" (Ubah nama sheet jika berbeda)
+        # Mengambil data dari tab "DataProgres" (sebelumnya "Progres")
         try:
-            sheet_progres = workbook.worksheet("Progres").get_all_records()
+            sheet_progres = workbook.worksheet("DataProgres").get_all_records()
             df_progres = pd.DataFrame(sheet_progres)
         except Exception:
             df_progres = pd.DataFrame() # Kosongkan jika tab tidak ditemukan
@@ -73,10 +73,6 @@ def load_data():
     except Exception as e:
         st.error(f"Gagal mengambil data dari Google Sheets: {e}")
         return pd.DataFrame(), pd.DataFrame()
-
-# Tampilkan status memuat data
-with st.spinner("Sinkronisasi data dari server..."):
-    df_sla3, df_progres = load_data()
 
 # ==========================================
 # 3. HELPER FUNCTION (Pemformatan Angka)
@@ -110,7 +106,7 @@ if st.button("🔄 Sinkronkan Data"):
 st.divider()
 
 # Membuat Tab Layout seperti di HTML
-tab1, tab2 = st.tabs(["Pencapaian Collection (DataAgregat)", "Progres Tagihan"])
+tab1, tab2 = st.tabs(["Pencapaian Collection (SLA 3)", "Progres Tagihan"])
 
 # ==========================================
 # TAB 1: PENCAPAIAN COLLECTION (SLA 3)
