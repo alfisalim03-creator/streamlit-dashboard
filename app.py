@@ -54,14 +54,14 @@ def load_data():
         ])
         client = gspread.authorize(creds)
         
-        # Buka Spreadsheet
+        # Buka Spreadsheet (Pastikan nama ini SAMA PERSIS dengan di Google Drive)
         workbook = client.open("Data Pencapaian Collection 2026")
         
-        # Mengambil data dari tab "DataAgregat" (sebelumnya "SLA3")
+        # Mengambil data dari tab "DataAgregat"
         sheet_sla3 = workbook.worksheet("DataAgregat").get_all_records()
         df_sla3 = pd.DataFrame(sheet_sla3)
         
-        # Mengambil data dari tab "DataProgres" (sebelumnya "Progres")
+        # Mengambil data dari tab "DataProgres"
         try:
             sheet_progres = workbook.worksheet("DataProgres").get_all_records()
             df_progres = pd.DataFrame(sheet_progres)
@@ -73,6 +73,10 @@ def load_data():
     except Exception as e:
         st.error(f"Gagal mengambil data dari Google Sheets: {e}")
         return pd.DataFrame(), pd.DataFrame()
+
+# PEMANGGILAN FUNGSI (Ini yang sebelumnya terhapus)
+with st.spinner("Sinkronisasi data dari server..."):
+    df_sla3, df_progres = load_data()
 
 # ==========================================
 # 3. HELPER FUNCTION (Pemformatan Angka)
@@ -105,7 +109,7 @@ if st.button("🔄 Sinkronkan Data"):
     st.rerun()
 st.divider()
 
-# Membuat Tab Layout seperti di HTML
+# Membuat Tab Layout
 tab1, tab2 = st.tabs(["Pencapaian Collection (SLA 3)", "Progres Tagihan"])
 
 # ==========================================
@@ -253,8 +257,8 @@ with tab1:
 # ==========================================
 with tab2:
     if df_progres.empty:
-        st.info("Data Progres Tagihan tidak ditemukan di Google Sheets (Pastikan ada tab bernama 'Progres').")
+        st.info("Data Progres Tagihan tidak ditemukan di Google Sheets (Pastikan ada tab bernama 'DataProgres').")
     else:
         st.write("Fitur Progres Tagihan sedang dalam pengembangan penyesuaian tata letak...")
-        # Jika Anda ingin menampilkan tabel mentah sementara
+        # Menampilkan tabel mentah sementara
         st.dataframe(df_progres.head(50), use_container_width=True)
